@@ -1,8 +1,8 @@
 language: csharp
-solution: CodingChallenge.sln
+solution: reservation-gap-rule.sln
 mono: none
 dotnet: 2.2
 install:
-  - dotnet restore CodingChallenge.sln
+  - dotnet restore reservation-gap-rule.sln
 script:
-- dotnet test CodingChallenge.sln
+- dotnet test reservation-gap-rule.sln
