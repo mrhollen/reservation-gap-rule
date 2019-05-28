@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using Newtonsoft.Json.Serialization;
 
 namespace CodingChallenge
 {
@@ -20,7 +21,20 @@ namespace CodingChallenge
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddRouting();
+            services
+                .AddMvc()
+                .AddJsonOptions(options => {
+                    // Send back a ISO date
+                    var settings = options.SerializerSettings;
+                    settings.DateFormatHandling = Newtonsoft.Json.DateFormatHandling.IsoDateFormat;
+
+                    // Don't mess with case of properties
+                    var resolver = options.SerializerSettings.ContractResolver as DefaultContractResolver;
+                    resolver.NamingStrategy = null;
+                });
+
+            // Add our reservation service so it can be injected
+            services.AddTransient<ReservationService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -30,18 +44,6 @@ namespace CodingChallenge
             {
                 app.UseDeveloperExceptionPage();
             }
-
-            var routeBuilder = new RouteBuilder(app);
-
-            routeBuilder.MapGet("api/availability", async (context) => 
-            {
-                var json = await new StreamReader(context.Request.Body).ReadToEndAsync();
-                var availabilityRequest = JsonConvert.DeserializeObject<AvailabilityRequest>(json, new IsoDateTimeConverter { DateTimeFormat = "yyyy-MM-dd" });
-
-                await context.Response.WriteAsync("Got it");
-            });
-
-            app.UseRouter(routeBuilder.Build());
         }
     }
 }
