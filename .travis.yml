@@ -5,4 +5,4 @@ dotnet: 2.2
 install:
   - dotnet restore reservation-gap-rule.sln
 script:
-- dotnet test reservation-gap-rule.sln
+  - dotnet test reservation-gap-rule.sln
