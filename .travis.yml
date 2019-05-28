@@ -1,0 +1,8 @@
+language: csharp
+solution: CodingChallenge.sln
+mono: none
+dotnet: 2.2
+install:
+  - dotnet restore CodingChallenge.sln
+script:
+- dotnet test CodingChallenge.sln
