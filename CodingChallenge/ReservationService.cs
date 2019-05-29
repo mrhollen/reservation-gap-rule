@@ -2,33 +2,38 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using CodingChallenge.Models;
+using CodingChallenge.Extensions;
 
 namespace CodingChallenge 
 {
     public class ReservationService
     {
-        private SortedSet<Reservation> reservations = new SortedSet<Reservation>(new ReservationComparer());
+        private HashSet<Campsite> campsites = new HashSet<Campsite>(new CampsiteEqualityComparer());
+
+        public bool CreateCampsite(Campsite campsite)
+        {
+            return campsites.Add(campsite);
+        }
 
         public bool CreateReservation(Reservation reservation)
         {
-            var firstFutureDate = reservations.Where(r => r.StartDate >= reservation.StartDate && r.CampsiteId == reservation.CampsiteId).FirstOrDefault();
-            var firstPastDate = reservations.Where(r => r.StartDate <= reservation.StartDate && r.CampsiteId == reservation.CampsiteId).FirstOrDefault();
-
-            if(firstFutureDate != null && firstFutureDate.Span.Overlaps(reservation.Span))
+            Campsite campsite;
+            if(campsites.TryGetValue(new Campsite(){Id = reservation.CampsiteId}, out campsite))
             {
+                if(campsite.CanBeReserved(reservation.Span, 1))
+                {
+                    return campsite.Reservations.TryAdd(reservation.EndDate, reservation);
+                }
+
                 return false;
             }
-            else if(firstPastDate != null && firstPastDate.Span.Overlaps(reservation.Span))
-            {
-                return false;
-            }
-
-            return reservations.Add(reservation);
+            
+            return false;
         }
 
-        public IEnumerable<Campsite> GetAvailableCampsites(DateTimeSpan requestedDates)
+        public IEnumerable<Campsite> GetAvailableCampsites(DateTimeSpan requestedDates, int numberOfDaysGap)
         {
-            throw new NotImplementedException();
+            return campsites.Where(c => c.CanBeReserved(requestedDates, numberOfDaysGap));
         }
     }
 }

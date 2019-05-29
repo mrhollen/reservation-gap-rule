@@ -10,6 +10,8 @@ namespace CodingChallenge.Tests
         [Theory]
         [InlineData(0, 3, 1, 3, true)]
         [InlineData(0, 3, 4, 6, false)]
+        [InlineData(1, 14, 3, 5, true)]
+        [InlineData(3, 5, 1, 14, true)]
         public void CanFindOverlap(int startA, int endA, int startB, int endB, bool shouldOverlap)
         {
             // Setup

@@ -13,11 +13,11 @@ namespace CodingChallenge
                 throw new InvalidOperationException("Cannot compare overlapping reservations");
             }
 
-            var result = a.StartDate.CompareTo(b.StartDate);
+            var result = a.StartDate.CompareTo(b.EndDate);
 
             if(result == 0)
             {
-                return a.CampsiteId.CompareTo(b.CampsiteId);
+                return a.CampsiteId.CompareTo(b.EndDate);
             } 
             else 
             {
