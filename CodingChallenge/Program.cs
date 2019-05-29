@@ -21,7 +21,7 @@ namespace CodingChallenge
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseKestrel(options => {
-                    options.Listen(IPAddress.Loopback, 8080); // Override the https port for now
+                    options.Listen(IPAddress.Any, 8080); // Override the https port for now
                 })
                 .UseStartup<Startup>();
     }
