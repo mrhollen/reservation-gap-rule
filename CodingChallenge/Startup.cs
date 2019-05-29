@@ -44,6 +44,13 @@ namespace CodingChallenge
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseMvc(routes =>
+            {
+                routes.MapRoute(
+                    name: "default",
+                    template: "{controller}/{action=Index}/{id?}");
+            });
         }
     }
 }

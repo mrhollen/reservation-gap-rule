@@ -3,9 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CodingChallenge
 {
-    [ApiController]
     [Route("api/[controller]")]
-    public class ReservationController : ControllerBase
+    public class ReservationController : Controller
     {
         private ReservationService reservationService;
 
@@ -14,10 +13,26 @@ namespace CodingChallenge
             this.reservationService = reservationService;
         }
 
-        [HttpGet("check")]
-        public IActionResult CheckReservations()
+        [HttpPost("check")]
+        public IActionResult CheckReservations([FromBody] AvailabilityRequest availabilityRequest)
         {
-            return Ok();
+            // Add the campsites
+            foreach(var campsite in availabilityRequest.Campsites)
+            {
+                this.reservationService.CreateCampsite(campsite);
+            }
+
+            // Add the reservations
+            foreach(var reservation in availabilityRequest.Reservations)
+            {
+                this.reservationService.CreateReservation(reservation);
+            }
+
+            // Search for availability
+            var searchSpan = new DateTimeSpan(availabilityRequest.Search.StartDate, availabilityRequest.Search.EndDate);
+
+            // Return as Json
+            return Json(this.reservationService.GetAvailableCampsites(searchSpan, 1));
         }
     }
 }

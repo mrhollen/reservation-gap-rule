@@ -7,64 +7,46 @@ namespace CodingChallenge.Tests
 {
     public class DateTimeExtensionTests
     {
-        [Fact]
-        public void FutureDateTimeWillCreateGap()
+        [Theory]
+        [InlineData(0, 2, 1)]
+        [InlineData(2, 0, 1)]
+        [InlineData(0, 2, 3)]
+        [InlineData(2, 0, 3)]
+        [InlineData(0, 4, 3)]
+        [InlineData(4, 0, 3)]
+        [InlineData(5, 0, 10)]
+        [InlineData(0, 5, 10)]
+        public void DateTimeWillCreateGap(int daysA, int daysB, int daysOfGap)
         {
             // Setup
-            var bookDate = new DateTime().AddDays(1);
-            var previousDate = new DateTime();
-            var gap = 1;
+            var bookDate = new DateTime().AddDays(daysA);
+            var previousDate = new DateTime().AddDays(daysB);
 
             // Test
-            var createdGap = previousDate.WillCreateGap(bookDate, gap);
+            var willCreateGap = previousDate.WillCreateGap(bookDate, daysOfGap);
 
             // Assert
-            Assert.True(createdGap);
+            Assert.True(willCreateGap);
         }
 
-        [Fact]
-        public void PastDateTimeWillCreateGap()
+        [Theory]
+        [InlineData(0, 1, 1)]
+        [InlineData(1, 0, 1)]
+        [InlineData(0, 3, 1)]
+        [InlineData(3, 0, 1)]
+        [InlineData(0, 5, 3)]
+        [InlineData(5, 0, 3)]
+        public void DateTimeWillNotCreateGap(int daysA, int daysB, int daysOfGap)
         {
             // Setup
-            var bookDate = new DateTime();
-            var previousDate = new DateTime().AddDays(1);
-            var gap = 1;
+            var bookDate = new DateTime().AddDays(daysA);
+            var previousDate = new DateTime().AddDays(daysB);
 
             // Test
-            var createdGap = previousDate.WillCreateGap(bookDate, gap);
+            var willCreateGap = previousDate.WillCreateGap(bookDate, daysOfGap);
 
             // Assert
-            Assert.True(createdGap);
-        }
-
-        [Fact]
-        public void FutureDateTimeWillNotCreateGap()
-        {
-            // Setup
-            var bookDate = new DateTime().AddDays(5);
-            var previousDate = new DateTime();
-            var gap = 1;
-
-            // Test
-            var createdGap = previousDate.WillCreateGap(bookDate, gap);
-
-            // Assert
-            Assert.False(createdGap);
-        }
-
-        [Fact]
-        public void PastDateTimeWillNotCreateGap()
-        {
-            // Setup
-            var bookDate = new DateTime();
-            var previousDate = new DateTime().AddDays(5);
-            var gap = 1;
-
-            // Test
-            var createdGap = previousDate.WillCreateGap(bookDate, gap);
-
-            // Assert
-            Assert.False(createdGap);
+            Assert.False(willCreateGap);
         }
     }
 }

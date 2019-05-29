@@ -8,6 +8,7 @@ namespace CodingChallenge
 {
     public class ReservationService
     {
+        // Here the campsites are stored in memory, but this could be replaced with a database of some kind
         private HashSet<Campsite> campsites = new HashSet<Campsite>(new CampsiteEqualityComparer());
 
         public bool CreateCampsite(Campsite campsite)
@@ -24,8 +25,6 @@ namespace CodingChallenge
                 {
                     return campsite.Reservations.TryAdd(reservation.EndDate, reservation);
                 }
-
-                return false;
             }
             
             return false;

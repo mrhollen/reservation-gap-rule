@@ -24,6 +24,7 @@ namespace CodingChallenge.Models
 
         public bool CanBeReserved(DateTimeSpan requestedDates, int numberOfDaysGap)
         {
+            // Find the booking dates before and after our current
             var firstPastReservation = Reservations.Where(kvp => kvp.Key <= requestedDates.EndDate).Select(kvp => kvp.Value).LastOrDefault();
             var firstFutureReservation = Reservations.Where(kvp => kvp.Key >= requestedDates.EndDate).Select(kvp => kvp.Value).FirstOrDefault();
 
@@ -48,6 +49,7 @@ namespace CodingChallenge.Models
                 return false;
             }
 
+            // Nothing disqualifies this site, so we can book it
             return true;
         }
     }

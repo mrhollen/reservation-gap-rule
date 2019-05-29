@@ -68,8 +68,9 @@ namespace CodingChallenge.Tests
 
         [Theory]
         [InlineData(12, 15, 1)]
+        [InlineData(12, 15, 4)]
         [InlineData(3, 5, 2)]
-        [InlineData(1, 2, 4)]
+        [InlineData(1, 2, 2)]
         public void CanGetAvailableCampsites(int startDate, int endDate, int idToReturn)
         {
             // Setup
@@ -84,8 +85,8 @@ namespace CodingChallenge.Tests
 
         [Theory]
         [InlineData(1, 14, 1)]
-        [InlineData(7, 8, 1)]
-        [InlineData(0, 1, 1)]
+        [InlineData(7, 10, 1)]
+        [InlineData(0, 2, 10)]
         public void ReturnsEmptySetWhenNoCampsitesAvailable(int startDate, int endDate, int gap)
         {
             // Setup
